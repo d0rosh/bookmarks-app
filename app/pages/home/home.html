@@ -1,0 +1,61 @@
+<header>
+	<div class="container-fluid">
+		<notice message="ctrl.noticeMsg"></notice>
+		<div class="row">
+			<div class="col-xs-6 col-sm-3 col-md-3">
+				<div class="logo">
+					<a href="#!/">
+						<img src="img/logo.png" alt="Logo">
+					</a>
+				</div>
+			</div>
+			<div class="col-xs-6 col-sm-3 col-sm-push-6 col-md-3 col-md-push-6">
+				<div class="settings-btn">
+					<a href="#!/settings" ng-click="ctrl.goToStg($event)">
+						<img src="img/settings-btn.png" alt="Settings">
+					</a>
+				</div>	
+			</div>
+			<div class="col-xs-12 col-sm-6 col-sm-pull-3 col-md-6 col-md-pull-3">
+				<div class="search">
+					<input type="text" placeholder="Search bookmarks" ng-model="searchText">
+				</div>
+			</div>
+		</div>
+	</div>
+</header>
+<div class="content" ng-class="ctrl.bg ? 'white' : 'black'" ng-style="ctrl.pageStyle">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-2 col-sm-1 col-xs-0"></div>
+			<div class="col-md-8 col-sm-10 col-xs-12">
+				<h2>Bookmark List</h2>
+				<my-loader show="ctrl.showLoader"></my-loader>
+				<ul ng-if="ctrl.showBkm" class="bookmarks-list">
+					<li class="bookmark" ng-repeat="item in ctrl.bookmarks | filter:searchText">
+						<span>{{item.title}}</span>
+						<button ng-click="ctrl.editItem(item)">Edit</button>
+					</li>
+				</ul>
+				<div class="state-list" ng-if="!ctrl.showBkm">List of bookmarks not loaded! This service is disabled in settings!)</div>
+				<div class="wrap-form">
+					<h2>Edit</h2>
+					<form class="bkm-form">
+						<label class="label">
+							<span>Bookmark title</span>
+							<input i-animate type="text" ng-model="ctrl.selectedItem.title">
+						</label>
+						<label class="label">
+							<span>Bookmark url</span>
+							<input i-animate type="text" ng-model="ctrl.selectedItem.url">
+						</label>
+
+						<button class="cancel-btn" ng-click="ctrl.cancelUpdate()">Cancel</button>
+						<button class="save-btn" ng-click="ctrl.saveItem(ctrl.selectedItem)">Save</button>
+					</form>
+				</div>
+			</div>
+			<div class="col-md-2 col-sm-1 col-xs-0"></div>
+		</div>
+	</div>
+</div>

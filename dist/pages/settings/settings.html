@@ -1,0 +1,125 @@
+<div class="container-fluid">
+	<notice message="ctrl.noticeMsg"></notice>
+	<div class="row">
+		<div class="col-md-2 wrap-sidebar">
+			<h2>Settings part</h2>
+			<div class="sidebar">
+				<ul class="menu">
+					<li>People</li>
+					<li>Appearence</li>
+					<li class="title">Advanced</li>
+					<li>Printing</li>
+					<li>Reset</li>
+					<li class="home-link"><a href="#!/">Home</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-md-10 wrap-settings">
+			<p id="people">People</p>
+			<div ng-if="ctrl.users.length > 0" class="people-block">
+				<div class="user-info" ng-repeat="user in ctrl.users">
+					<img active-user ng-click="ctrl.openAvatarList(user)" ng-src="../../img/icons/users/{{user.img}}" alt="photo">
+					<div class="wrap-text">
+						<span ng-if="ctrl.currentUser.$id != user.$id">{{user.name}}</span>
+						<input type="text" ng-model="ctrl.currentUser.name" ng-if="ctrl.showInput && ctrl.currentUser.$id == user.$id">
+						<span ng-if="ctrl.currentUser.$id != user.$id">{{user.email}}</span>
+						<input type="text" ng-model="ctrl.currentUser.email" ng-if="ctrl.showInput && ctrl.currentUser.$id == user.$id">
+					</div>
+					<button ng-click="ctrl.editUser(user)">Edit</button>
+					<button ng-if="ctrl.showInput && ctrl.currentUser.$id == user.$id" ng-click="ctrl.cancelEdit()">Cancel</button>
+					<button ng-if="ctrl.showInput && ctrl.currentUser.$id == user.$id" ng-click="ctrl.updateUser()">Save</button>
+				</div>
+				<div ng-if="ctrl.showAvatars" class="avatar-block">
+					<img ng-repeat="avatar in ctrl.userAvatars" ng-click="ctrl.changeAvatar(avatar)" ng-src="../../img/icons/users/{{avatar}}" alt="Avatar">
+				</div>
+			</div>
+			<button ng-click="ctrl.userPopapVisib = !ctrl.userPopapVisib">Manage other people</button>
+
+			<p id="appearence">Appearence</p>
+			<div class="themes">
+				<h2>Themes</h2>
+				<div id="radios">
+					<label for="input1"></label>
+					<input  id="input1" name="radio" type="radio" ng-change="ctrl.changeBg()" ng-value="true" ng-model="ctrl.bg"/>
+					<label for="input2"></label>
+					<input  id="input2" name="radio" type="radio" ng-change="ctrl.changeBg()" ng-value="false" ng-model="ctrl.bg"/>
+					<span id="slider"></span>
+				</div>
+			</div>
+			<div class="add-bookmark">
+				<h2>Add Bookmark</h2>
+				<ul class="list">
+					<li ng-repeat="bookmark in ctrl.bookmarks">
+						{{bookmark.title}}
+					</li>
+				</ul>
+				<form novalidate name="newBkmForm">
+					<label class="label">
+						<span>Title</span>
+						<input i-animate type="text" ng-model="ctrl.newBookmark.title" required>
+					</label>
+					<button ng-disabled="newBkmForm.$invalid" ng-click="ctrl.saveItem(ctrl.newBookmark)" ng-class="{ 'btn-dis' : newBkmForm.$invalid, 'btn-undis' : !newBkmForm.$invalid}">Save</button>
+				</form>
+			</div>
+			<div class="show-bookmark">
+				<h2>Show Bookmarks</h2>
+				<p class="btn-switch">					
+					<input type="radio" id="yes" name="switch" class="btn-switch__radio btn-switch__radio_yes" ng-change="ctrl.visibleBkb()" ng-value="true" ng-model="ctrl.showBkm"/>
+					<input type="radio" id="no" name="switch" class="btn-switch__radio btn-switch__radio_no" ng-change="ctrl.visibleBkb()" ng-value="false" ng-model="ctrl.showBkm"/>		
+					<label for="yes" class="btn-switch__label btn-switch__label_yes"><span class="btn-switch__txt"></span></label>								  
+					<label for="no" class="btn-switch__label btn-switch__label_no"><span class="btn-switch__txt"></span></label>							
+				</p>
+			</div>
+			<div class="style-font">
+				<h2>Font Size</h2>
+				<div class="select">
+					<select ng-model="ctrl.fsz" ng-change="ctrl.changeFsz()">
+				    	<option value="14px">Small</option>
+				    	<option value="19px">Medium</option>
+				    	<option value="25px">Large</option>
+					</select>
+				</div>
+			</div>
+			<div class="style-zoom">
+				<h2>Page Zoom</h2>
+				<div class="select">
+					<select ng-model="ctrl.pzm" ng-change="ctrl.changePzm()">
+				    	<option value="0.5">50%</option>
+				    	<option value="1">100%</option>
+				    	<option value="1.5">150%</option>
+				    	<option value="2">200%</option>
+					</select>
+				</div>
+			</div>
+			<p id="advanced">Advanced</p>
+			<div class="printing">
+				<h2>Printing</h2>
+				<button ng-click="ctrl.print()">Printers</button>
+			</div>
+			<div class="reset">
+				<h2>Reset</h2>
+				<button ng-click="ctrl.reset()">Reset</button>
+				<p>Restore settings to their original defaults</p>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="wrap-user-popap" ng-if="ctrl.userPopapVisib">
+	<div class="user-popap">
+		<form novalidate name="userForm">
+			<input type="text" ng-model="ctrl.newUser.name" placeholder="Name" required>
+			<input type="email" ng-model="ctrl.newUser.email" placeholder="Email" required>
+			<div class="select-style">
+				<select ng-model="ctrl.newUser.gender" ng-init="ctrl.newUser.gender = ctrl.genders[0]">
+					<option ng-repeat="gender in ctrl.genders" value="{{gender}}">{{gender}}</option>
+				</select>
+			</div>
+			<div class="select-style">
+				<select ng-model="ctrl.newUser.role" ng-init="ctrl.newUser.role = ctrl.roles[0]">
+					<option ng-repeat="role in ctrl.roles" value="{{role}}">{{role}}</option>
+				</select>
+			</div>
+			<button ng-class="{ 'btn-dis' : userForm.$invalid, 'btn-undis' : !userForm.$invalid}" ng-disabled="userForm.$invalid" ng-click="ctrl.saveUser()">Save</button>
+		</form>
+	</div>
+</div>
